@@ -1,4 +1,5 @@
 <?php
+    require_once "dbConnection.php";
     function clean($input) {
         $result = trim($input);
         $result = strip_tags($result);
@@ -29,7 +30,7 @@
             $allowExtensions = ["png", "jpeg", "jpg"];
             $imageArray = explode("/", $imageType);
             $imageExtensions = end($imageArray);
-            if (in_array($imageExtensions, $allowExtensions)) {
+            if (in_array($imageExtensions, $allowExtensions) && count($errors) == 0 ) {
                 $imageFinalName = time().rand().".".$imageExtensions;
                 $distPath = "uploads/".$imageFinalName;
                 if (!move_uploaded_file($imageTempName, $distPath)) {
@@ -44,10 +45,14 @@
                 echo '* '.$key.' : '.$value.'<br>';
             }
         } else {
-            $file = fopen("txt.txt", "a+");
-            $text = $title."|".$content."|".$distPath."\n";
-            fwrite($file, $text);
-            fclose($file);
+            $sql = "INSERT INTO articles (title, content, image) VALUES ('$title', '$content', '$distPath')";
+            $op = mysqli_query($connect, $sql);
+            mysqli_close($connect);
+            if ($op) {
+                echo "Row Inserted";
+            } else {
+                echo "Error: Try Again".mysqli_error($connect);
+            }
         }
     }
 ?>
