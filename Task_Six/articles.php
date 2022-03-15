@@ -2,15 +2,6 @@
     require_once "dbConnection.php";
     $sql = "SELECT * FROM articles";
     $data = mysqli_query($connect, $sql);
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $articleRow = $_POST["articleRow"];
-        $file = fopen("txt.txt", "w+");
-        array_splice($articlesArr, $articleRow, 1);
-        for ($i=0; $i < count($articlesArr); $i++) {
-            fwrite($file, $articlesArr[$i]);
-        }
-        fclose($file);
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +41,7 @@
                         <a href="remove.php?id=<?php echo $row["id"] ?>" class='btn btn-danger'>Delete</a>
                     </td>
                 </tr>
-                    <?php
+                <?php
                     }
                     mysqli_close($connect);
                 ?>
