@@ -76,7 +76,7 @@
                 <input class="form-control" type="file" id="formFile" name="image">
             </div>
             <div class="col-md-6">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="submit" class="btn btn-primary">Create</button>
             </div>
         </form>
     </body>

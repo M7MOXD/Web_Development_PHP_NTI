@@ -49,7 +49,9 @@
             $op = mysqli_query($connect, $sql);
             mysqli_close($connect);
             if ($op) {
-                echo "Row Inserted";
+                $message = "Row Inserted";
+                $_SESSION["message"] = $message;
+                header("location: articles.php");
             } else {
                 echo "Error: Try Again".mysqli_error($connect);
             }

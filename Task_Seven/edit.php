@@ -1,5 +1,13 @@
 <?php
     require_once "dbConnection.php";
+    $id = $_GET["id"];
+    $sql = "SELECT * FROM articles WHERE id=$id";
+    $op = mysqli_query($connect, $sql);
+    if ($op) {
+        $data = mysqli_fetch_assoc($op);
+    } else {
+        echo "Error: Try Again".mysqli_error($connect);
+    }
     function clean($input) {
         $result = trim($input);
         $result = strip_tags($result);
@@ -22,12 +30,13 @@
             $errors["content"] = "Content Length Must be less than 50 Character";
         }
         if (!$image["name"]) {
-            $errors["image"] = "File is Required";
+            $distPath = $data["image"];
         } else {
+            unlink($data["image"]);
             $imageName = $image["name"];
             $imageTempName = $image["tmp_name"];
             $imageType = $image["type"];
-            $allowExtensions = ["png", "jpeg", "jpg"];
+            $allowExtensions = ["png", "jpeg"];
             $imageArray = explode("/", $imageType);
             $imageExtensions = end($imageArray);
             if (in_array($imageExtensions, $allowExtensions) && count($errors) == 0 ) {
@@ -45,11 +54,13 @@
                 echo '* '.$key.' : '.$value.'<br>';
             }
         } else {
-            $sql = "INSERT INTO articles (title, content, image) VALUES ('$title', '$content', '$distPath')";
+            $sql = "UPDATE articles SET title='$title', content='$content', image='$distPath' WHERE id=$id";
             $op = mysqli_query($connect, $sql);
             mysqli_close($connect);
             if ($op) {
-                echo "Row Inserted";
+                $message = "Row Updated";
+                $_SESSION["message"] = $message;
+                header("location: articles.php");
             } else {
                 echo "Error: Try Again".mysqli_error($connect);
             }
@@ -67,21 +78,21 @@
         <title>Article</title>
     </head>
     <body>
-        <form class="row g-3 container mx-auto" action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
+        <form class="row g-3 container mx-auto" action="edit.php?id=<?php echo $data["id"];?>" method="POST" enctype="multipart/form-data">
             <div class="col-md-6">
                 <label for="inputTitle" class="form-label">Title</label>
-                <input type="text" class="form-control" id="inputTitle" name="title">
+                <input type="text" class="form-control" id="inputTitle" name="title" value="<?php echo $data["title"] ?>">
             </div>
             <div class="col-md-6">
                 <label for="inputContent" class="form-label">Content</label>
-                <input type="text" class="form-control" id="inputContent" name="content">
+                <input type="text" class="form-control" id="inputContent" name="content" value="<?php echo $data["content"] ?>">
             </div>
             <div class="col-md-12">
                 <label for="formFile" class="form-label">Image</label>
                 <input class="form-control" type="file" id="formFile" name="image">
             </div>
             <div class="col-md-6">
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
             </div>
         </form>
     </body>
