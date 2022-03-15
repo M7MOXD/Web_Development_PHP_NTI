@@ -1,7 +1,7 @@
 <?php
     require_once "dbConnection.php";
     $sql = "SELECT * FROM articles";
-    $data = mysqli_query($connect, $sql);
+    $op = mysqli_query($connect, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +25,7 @@
             </thead>
             <tbody>
                 <?php
-                    while($row = mysqli_fetch_assoc($data)) {
+                    while($row = mysqli_fetch_assoc($op)) {
                 ?>
                 <tr>
                     <td>
