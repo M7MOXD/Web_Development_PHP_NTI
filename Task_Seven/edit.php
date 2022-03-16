@@ -32,7 +32,6 @@
         if (!$image["name"]) {
             $distPath = $data["image"];
         } else {
-            unlink($data["image"]);
             $imageName = $image["name"];
             $imageTempName = $image["tmp_name"];
             $imageType = $image["type"];
@@ -40,6 +39,7 @@
             $imageArray = explode("/", $imageType);
             $imageExtensions = end($imageArray);
             if (in_array($imageExtensions, $allowExtensions) && count($errors) == 0 ) {
+                unlink($data["image"]);
                 $imageFinalName = time().rand().".".$imageExtensions;
                 $distPath = "uploads/".$imageFinalName;
                 if (!move_uploaded_file($imageTempName, $distPath)) {
