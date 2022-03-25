@@ -1,0 +1,42 @@
+USERS Table
+user_id | name | email | password | phone | profile_img | ROLES(id)
+
+ROLES Table
+role_id | title
+
+ORDERS Table
+order_id | status | totla_price | USERS(id)
+
+PRODUCTS Table
+product_id | name | description | price | product_img | addBy(USER(id)) | CATEGORIES(id)
+
+CATEGORIES Table
+category_id | title
+
+ORDER_PRODUCTS Table
+order_product_id | quantity | ORDERS(id) | PRODUCTS(id)
+
+USERS : ROLES
+    1   :   1
+    m   :   1
+=   m   :   1
+
+USERS : ORDERS
+    1   :   m
+    1   :   1
+=   1   :   m
+
+USERS : IMG
+    1   :   1
+    1   :   1
+=   1   :   1
+
+PRODUCTS : CATEGORIES
+    1   :   1
+    m   :   1
+=   m   :   1
+
+ORDERS : PRODUCTS
+    1   :   m
+    m   :   1
+=   m   :   m
